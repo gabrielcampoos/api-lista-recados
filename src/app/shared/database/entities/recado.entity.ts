@@ -20,10 +20,10 @@ export class RecadoEntity {
   @Column({ type: "varchar", length: 255, nullable: false })
   recado!: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
+  @Column({ name: "criado_por", type: "varchar", length: 255, nullable: false })
   criadoPor!: string;
 
-  @Column({ name: "criadoem", type: "timestamp", nullable: false })
+  @Column({ name: "criado_em", type: "timestamp", nullable: false })
   criadoEm!: Date;
 
   @Column({ type: "boolean", nullable: false })

@@ -1,5 +1,6 @@
 import { Express, Request, Response } from "express";
-import rotasRecados from "../../app/features/recados/recados.routes";
+
+import rotasRecado from "../../app/features/recados/recados.routes";
 import rotasUsuario from "../../app/features/usuarios/usuarios.routes";
 
 export function rotasApp(app: Express) {
@@ -8,5 +9,5 @@ export function rotasApp(app: Express) {
   });
 
   app.use("/usuarios", rotasUsuario);
-  app.use("/recados", rotasRecados);
+  app.use("/recados", rotasRecado);
 }

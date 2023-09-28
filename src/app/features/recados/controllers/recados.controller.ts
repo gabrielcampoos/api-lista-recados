@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CriarRecado } from "../usecases/criar-recado-usecase";
 import { AtualizarRecado } from "../usecases/editar-recado-usecase";
+import { ExcluirRecado } from "../usecases/excluir-recado-usecase";
 import { ListarRecados } from "../usecases/listar-recados-usecase";
 
 export class RecadosController {
@@ -56,5 +57,19 @@ export class RecadosController {
     }
 
     return res.status(200).json(retorno);
+  }
+
+  static async deletar(req: Request, res: Response) {
+    const { idUsuario } = req.body;
+    const { idRecado } = req.params;
+
+    const usecase = new ExcluirRecado();
+    const resultado = await usecase.execute({ idUsuario, idRecado });
+
+    if (!resultado.sucesso) {
+      return res.status(404).json(resultado);
+    }
+
+    return res.status(200).json(resultado);
   }
 }

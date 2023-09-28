@@ -24,12 +24,18 @@ export class RecadoRepository {
     return !!usuarioEncontrado;
   }
 
-  public async recadoExiste(idRecado: string): Promise<boolean> {
+  public async recadoExiste(
+    idUsuario: string,
+    idRecado: string
+  ): Promise<Recado | undefined> {
     const recadoEncontrado = await this._manager.findOne(RecadoEntity, {
-      where: { id: idRecado },
+      where: { id: idRecado, idUsuario },
+      relations: { usuario: true },
     });
 
-    return !!recadoEncontrado;
+    if (!recadoEncontrado) return undefined;
+
+    return this.entityToModel(recadoEncontrado);
   }
 
   public async criarRecado(dados: CriarRecadoDTO): Promise<Recado> {

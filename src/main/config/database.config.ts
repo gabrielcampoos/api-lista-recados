@@ -7,6 +7,7 @@ const rootDir = isProduction ? "dist" : "src";
 export const typeorm = new DataSource({
   type: "postgres",
   url: postgresEnvs.url,
+  schema: "public",
   synchronize: false,
   logging: false,
   ssl: {
