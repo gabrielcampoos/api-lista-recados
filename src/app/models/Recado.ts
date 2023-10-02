@@ -1,15 +1,15 @@
 import { Base } from ".";
 
 type AtualizarRecadoDTO = {
-  titulo: string;
-  recado: string;
+  titulo?: string;
+  recado?: string;
   criadoEm: Date;
 };
 
 export type RecadoJSON = {
   id: string;
-  titulo: string;
-  recado: string;
+  titulo?: string;
+  recado?: string;
   criadoEm: Date;
   criadoPor: string;
 };
@@ -19,9 +19,9 @@ export class Recado extends Base {
 
   constructor(
     id: string,
-    private _titulo: string,
-    private _recado: string,
-    private _criadoPor: string
+    private _criadoPor: string,
+    private _titulo?: string,
+    private _recado?: string
   ) {
     super(id);
     this._criadoEm = new Date();
@@ -39,7 +39,7 @@ export class Recado extends Base {
 
   public atualizarRecado(novasInfos: AtualizarRecadoDTO): boolean {
     if (novasInfos.titulo) {
-      if (novasInfos.titulo.length < 0) {
+      if (novasInfos.titulo?.length < 0) {
         return false;
       }
 

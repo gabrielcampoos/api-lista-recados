@@ -35,13 +35,13 @@ export class UsuarioEntity {
   @PrimaryColumn()
   id!: string;
 
-  @Column({ unique: true, type: "varchar", length: 150 })
+  @Column()
   email!: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
+  @Column()
   nome!: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column()
   senha!: string;
 
   @OneToMany(() => RecadoEntity, (recado) => recado.usuario)

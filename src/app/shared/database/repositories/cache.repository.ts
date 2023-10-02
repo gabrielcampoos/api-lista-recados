@@ -13,10 +13,10 @@ export class CacheRepository {
 
   public async set<T>(chave: string, dado: T): Promise<"OK"> {
     const dataString = JSON.stringify(dado);
-    return await this._redis.set(chave, dataString);
+    return this._redis.set(chave, dataString);
   }
 
   public async delete(chave: string): Promise<number> {
-    return await this._redis.del(chave);
+    return this._redis.del(chave);
   }
 }

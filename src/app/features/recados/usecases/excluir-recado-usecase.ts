@@ -8,7 +8,7 @@ export type RetornoExcluir = {
   dadosRetornados?: string;
 };
 
-type ExcluirRecadoDTO = {
+export type ExcluirRecadoDTO = {
   idUsuario: string;
   idRecado: string;
 };

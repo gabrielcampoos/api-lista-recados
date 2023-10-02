@@ -1,4 +1,5 @@
-import { Recado } from "../../../models";
+import { Recado, RecadoJSON } from "../../../models";
+import { CacheRepository } from "../../../shared/database/repositories";
 import { RecadoRepository } from "../repositories/recados.repository";
 
 type RetornoListar = {
@@ -8,10 +9,11 @@ type RetornoListar = {
 };
 
 export class ListarRecados {
-  async listarTodos(idUsuario: string): Promise<RetornoListar> {
-    const repository = new RecadoRepository();
+  async execute(idUsuario: string): Promise<RetornoListar> {
+    const repositoryRecado = new RecadoRepository();
+    const cacheRepository = new CacheRepository();
 
-    const busca = await repository.usuarioExiste(idUsuario);
+    const busca = await repositoryRecado.usuarioExiste(idUsuario);
 
     if (!busca) {
       return {
@@ -20,12 +22,26 @@ export class ListarRecados {
       };
     }
 
-    const dadosRetornados = await repository.listarRecados(idUsuario);
+    const recadosCache = await cacheRepository.get<RecadoJSON[]>(
+      `recados-usuario-${idUsuario}`
+    );
+    let recados: RecadoJSON[] = [];
+
+    if (!recadosCache) {
+      const recadosPrincipal = await repositoryRecado.listarRecados(idUsuario);
+      recados = recadosPrincipal.map((r) => r.toJSON());
+
+      await cacheRepository.set<RecadoJSON[]>(
+        `recados-usuario-${idUsuario}`,
+        recados
+      );
+    } else {
+      recados = recadosCache;
+    }
 
     return {
       sucesso: true,
       mensagem: "Recados listados com sucesso.",
-      dadosRetornados: dadosRetornados,
     };
   }
 

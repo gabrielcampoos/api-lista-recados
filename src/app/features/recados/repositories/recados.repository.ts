@@ -2,15 +2,20 @@ import { FindOptionsWhere } from "typeorm";
 import { DatabaseConnection } from "../../../../main/database";
 import { Recado } from "../../../models";
 import { RecadoEntity, UsuarioEntity } from "../../../shared/database/entities";
-import {
-  CriarRecadoDTO,
-  RetornoCriarRecado,
-} from "../usecases/criar-recado-usecase";
+import { CriarRecadoDTO } from "../usecases/criar-recado-usecase";
 
 export type RetornoExcluir = {
   sucesso: boolean;
   mensagem: string;
   dadosRetornados?: string;
+};
+
+export type AtualizarDTO = {
+  idRecado: string;
+  titulo?: string;
+  recado?: string;
+  arquivado: boolean;
+  criadoPor: string;
 };
 
 export class RecadoRepository {
@@ -78,28 +83,14 @@ export class RecadoRepository {
     return recadosFiltrados.map((r) => this.entityToModel(r));
   }
 
-  public async editarRecado(
-    dados: CriarRecadoDTO
-  ): Promise<RetornoCriarRecado> {
-    const { id, arquivado, recado, titulo } = dados;
+  async editarRecado(dados: AtualizarDTO): Promise<void> {
+    const { idRecado, titulo, recado, arquivado, criadoPor } = dados;
 
-    const editarRecado = await this._manager.update(
+    await this._manager.update(
       RecadoEntity,
-      { id },
-      { arquivado, recado, titulo }
+      { id: idRecado },
+      { titulo, recado, arquivado, criadoPor: criadoPor }
     );
-
-    if (!editarRecado.affected) {
-      return {
-        sucesso: false,
-        mensagem: "Recado não existe.",
-      };
-    }
-
-    return {
-      sucesso: true,
-      mensagem: "Recado atualizado com sucesso.",
-    };
   }
 
   public async excluirRecado(id: string): Promise<RetornoExcluir> {

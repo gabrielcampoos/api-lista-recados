@@ -2,6 +2,7 @@ import { UsuarioJSON } from "../../../models";
 import { UsuariosRepository } from "../repositories";
 
 export type CadastrarLogarUsuarioDTO = {
+  nome: string;
   email: string;
   senha: string;
 };

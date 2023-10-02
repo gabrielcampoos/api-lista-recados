@@ -35,5 +35,5 @@ export function validarDadosUsuario(
     });
   }
 
-  next();
+  return next();
 }

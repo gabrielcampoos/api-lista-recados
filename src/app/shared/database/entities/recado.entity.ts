@@ -14,29 +14,25 @@ export class RecadoEntity {
   @PrimaryColumn({ type: "uuid" })
   id!: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
+  @Column()
   titulo!: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
+  @Column()
   recado!: string;
 
-  @Column({ name: "criado_por", type: "varchar", length: 255, nullable: false })
+  @Column()
   criadoPor!: string;
 
-  @Column({ name: "criado_em", type: "timestamp", nullable: false })
+  @Column()
   criadoEm!: Date;
 
-  @Column({ type: "boolean", nullable: false })
+  @Column()
   arquivado!: boolean;
-
-  @Column({ name: "id_usuario", type: "uuid", nullable: false })
-  idUsuario!: string;
 
   @ManyToOne(() => UsuarioEntity, (usuario) => usuario.recados)
   @JoinColumn({
-    name: "id_usuario",
-    foreignKeyConstraintName: "recados_id_usuario_fkey",
-    referencedColumnName: "id",
+    name: "criado_por",
+    referencedColumnName: "email",
   })
   usuario!: UsuarioEntity;
 

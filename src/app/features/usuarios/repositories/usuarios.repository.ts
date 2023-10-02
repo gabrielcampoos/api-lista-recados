@@ -8,18 +8,18 @@ export class UsuariosRepository {
 
   public async verificarSeExisteUsuarioPorEmail(
     email: string
-  ): Promise<boolean> {
-    const usuarioEncontrado = await this._manager.findOne(UsuarioEntity, {
-      where: { email },
+  ): Promise<Usuario | null> {
+    const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
+      email,
     });
 
-    return !!usuarioEncontrado;
+    if (!usuarioEncontrado) return null;
+
+    return this.entityToModel(usuarioEncontrado);
   }
 
   public async cadastrar(dados: CadastrarLogarUsuarioDTO): Promise<Usuario> {
-    const { email, senha } = dados;
-
-    const newUser = this._manager.create(UsuarioEntity, { email, senha });
+    const newUser = this._manager.create(UsuarioEntity, { ...dados });
     const usuarioCriado = await this._manager.save(newUser);
 
     return this.entityToModel(usuarioCriado);

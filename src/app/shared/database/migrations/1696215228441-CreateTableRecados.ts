@@ -1,6 +1,11 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from "typeorm";
 
-export class CreateTableRecados1695865496742 implements MigrationInterface {
+export class CreateTableRecados1696215228441 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -43,18 +48,15 @@ export class CreateTableRecados1695865496742 implements MigrationInterface {
             isNullable: false,
             default: false,
           },
-          {
-            name: "id_usuario",
-            type: "uuid",
-            isNullable: false,
-          },
         ],
         foreignKeys: [
-          {
-            columnNames: ["id_usuario"],
-            referencedColumnNames: ["id"],
+          new TableForeignKey({
+            columnNames: ["criado_por"],
+            referencedColumnNames: ["email"],
             referencedTableName: "usuarios",
-          },
+            name: "fk_recados_criado_por",
+            onDelete: "CASCADE",
+          }),
         ],
       })
     );

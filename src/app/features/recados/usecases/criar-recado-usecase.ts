@@ -7,13 +7,13 @@ export type RetornoCriarRecado = {
   dados?: RecadoJSON;
 };
 
-export type CriarRecadoDTO = {
+export interface CriarRecadoDTO {
   id: string;
   arquivado: boolean;
   titulo: string;
   recado: string;
   criadoPor: string;
-};
+}
 
 export class CriarRecado {
   public async execute(
