@@ -39,13 +39,9 @@ export class UsuariosRepository {
     return this.entityToModel(usuarioEncontrado);
   }
 
-  public async buscaUsuarioPorID(
-    idUsuario: string
-  ): Promise<Usuario | undefined> {
-    const usuarioEncontrado = await this._manager.findOne(UsuarioEntity, {
-      where: {
-        id: idUsuario,
-      },
+  public async buscaUsuarioPorID(id: string): Promise<Usuario | undefined> {
+    const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
+      id,
     });
 
     // const usuarios = await usuarioRepo.find(UsuarioEntity, {
