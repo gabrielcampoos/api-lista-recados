@@ -28,6 +28,6 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:run": "yarn typeorm migration:run -d ./src/main/config/typeorm.config.ts",
     "build": "npx tsc",
-    "start": "node ./dist/main/server.js"
+    "start": "node ./dist/main/index.js"
   }
 }
