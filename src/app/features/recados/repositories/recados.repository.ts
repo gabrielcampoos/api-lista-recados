@@ -22,19 +22,19 @@ export class RecadoRepository {
   private _manager = DatabaseConnection.connection.manager;
 
   public async usuarioExiste(id: string): Promise<boolean> {
-    const usuarioEncontrado = await this._manager.findOne(UsuarioEntity, {
-      where: { id },
+    const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
+      id,
     });
 
     return !!usuarioEncontrado;
   }
 
   public async recadoExiste(
-    idUsuario: string,
+    criadoPor: string,
     idRecado: string
   ): Promise<Recado | undefined> {
     const recadoEncontrado = await this._manager.findOne(RecadoEntity, {
-      where: { id: idRecado, idUsuario },
+      where: { id: idRecado, criadoPor },
       relations: { usuario: true },
     });
 
