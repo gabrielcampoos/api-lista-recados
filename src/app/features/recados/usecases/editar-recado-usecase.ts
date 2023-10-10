@@ -8,13 +8,13 @@ import { RecadoRepository } from "../repositories/recados.repository";
 import { RetornoCriarRecado } from "./criar-recado-usecase";
 
 type AtualizarRecadoDTO = {
-  idUsuario: string;
+  email: string;
   idRecado: string;
   novosDados: {
     titulo?: string;
     recado?: string;
     arquivado: boolean;
-    criadoEm: Date;
+    criado_em: Date;
   };
 };
 
@@ -76,14 +76,14 @@ const PREFIX_CACHE = "alterar-vaga";
 
 export class EditarRecado {
   public async execute(dados: AtualizarRecadoDTO): Promise<RetornoCriarRecado> {
-    const { idRecado, idUsuario, novosDados } = dados;
+    const { idRecado, email, novosDados } = dados;
 
     const repositoryUsuario = new UsuariosRepository();
     const repositoryRecado = new RecadoRepository();
     const cacheRepository = new CacheRepository();
 
-    const usuarioEncontrado = await repositoryUsuario.buscaUsuarioPorID(
-      idUsuario
+    const usuarioEncontrado = await repositoryUsuario.buscaUsuarioPorEmail(
+      email
     );
 
     if (!usuarioEncontrado) {
@@ -93,7 +93,7 @@ export class EditarRecado {
       };
     }
 
-    const recado = await repositoryRecado.recadoExiste(idUsuario, idRecado);
+    const recado = await repositoryRecado.recadoExiste(email, idRecado);
 
     if (!recado) {
       return {
@@ -105,10 +105,10 @@ export class EditarRecado {
     const atualizado = recado.atualizarRecado({
       titulo: novosDados.titulo,
       recado: novosDados.recado,
-      criadoEm: novosDados.criadoEm,
+      criado_em: novosDados.criado_em,
     });
 
-    await cacheRepository.delete(`recados-usuario-${idUsuario}`);
+    await cacheRepository.delete(`recados-usuario-${email}`);
     await cacheRepository.delete(`recado-${idRecado}`);
 
     if (!atualizado) {
@@ -124,7 +124,6 @@ export class EditarRecado {
       idRecado,
       titulo: recadoJSON.titulo,
       recado: recadoJSON.recado,
-      criadoPor: recadoJSON.criadoPor,
       arquivado: dados.novosDados.arquivado,
     });
 

@@ -8,11 +8,9 @@ export type RetornoCriarRecado = {
 };
 
 export interface CriarRecadoDTO {
-  id: string;
-  arquivado: boolean;
-  titulo: string;
-  recado: string;
-  criadoPor: string;
+  titulo?: string;
+  recado?: string;
+  criado_por: string;
 }
 
 export class CriarRecado {
@@ -22,7 +20,7 @@ export class CriarRecado {
     const repository = new RecadoRepository();
 
     // 1 - verifica se existe um outro usuario com o mesmo email já cadastrado
-    const existe = await repository.usuarioExiste(dadosNovoRecado.criadoPor);
+    const existe = await repository.usuarioExiste(dadosNovoRecado.criado_por);
     if (!existe) {
       return {
         sucesso: false,

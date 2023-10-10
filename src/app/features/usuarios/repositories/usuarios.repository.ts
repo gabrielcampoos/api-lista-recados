@@ -8,14 +8,12 @@ export class UsuariosRepository {
 
   public async verificarSeExisteUsuarioPorEmail(
     email: string
-  ): Promise<Usuario | null> {
+  ): Promise<boolean | null> {
     const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
       email,
     });
 
-    if (!usuarioEncontrado) return null;
-
-    return this.entityToModel(usuarioEncontrado);
+    return !!usuarioEncontrado;
   }
 
   public async cadastrar(dados: CadastrarLogarUsuarioDTO): Promise<Usuario> {
@@ -39,9 +37,11 @@ export class UsuariosRepository {
     return this.entityToModel(usuarioEncontrado);
   }
 
-  public async buscaUsuarioPorID(id: string): Promise<Usuario | undefined> {
+  public async buscaUsuarioPorEmail(
+    email: string
+  ): Promise<Usuario | undefined> {
     const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
-      id,
+      email,
     });
 
     // const usuarios = await usuarioRepo.find(UsuarioEntity, {
@@ -53,6 +53,10 @@ export class UsuariosRepository {
     if (!usuarioEncontrado) return undefined;
 
     return this.entityToModel(usuarioEncontrado);
+  }
+
+  public async clear() {
+    await this._manager.delete(UsuarioEntity, {});
   }
 
   // TRANSFORMA RESULTADO DA BUSCA EM UMA INSTANCIA DA MODEL

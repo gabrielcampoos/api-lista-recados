@@ -1,6 +1,6 @@
 import { FindOptionsWhere } from "typeorm";
 import { DatabaseConnection } from "../../../../main/database";
-import { Recado } from "../../../models";
+import { Recado, Usuario } from "../../../models";
 import { RecadoEntity, UsuarioEntity } from "../../../shared/database/entities";
 import { CriarRecadoDTO } from "../usecases/criar-recado-usecase";
 
@@ -15,26 +15,25 @@ export type AtualizarDTO = {
   titulo?: string;
   recado?: string;
   arquivado: boolean;
-  criadoPor: string;
 };
 
 export class RecadoRepository {
   private _manager = DatabaseConnection.connection.manager;
 
-  public async usuarioExiste(id: string): Promise<boolean> {
+  public async usuarioExiste(email: string): Promise<boolean> {
     const usuarioEncontrado = await this._manager.findOneBy(UsuarioEntity, {
-      id,
+      email,
     });
 
     return !!usuarioEncontrado;
   }
 
   public async recadoExiste(
-    criadoPor: string,
+    criado_por: string,
     idRecado: string
   ): Promise<Recado | undefined> {
     const recadoEncontrado = await this._manager.findOne(RecadoEntity, {
-      where: { id: idRecado, criadoPor },
+      where: { id: idRecado, criado_por },
       relations: { usuario: true },
     });
 
@@ -44,12 +43,12 @@ export class RecadoRepository {
   }
 
   public async criarRecado(dados: CriarRecadoDTO): Promise<Recado> {
-    const { titulo, recado, criadoPor } = dados;
+    const { titulo, recado, criado_por } = dados;
 
     const novoRecado = this._manager.create(RecadoEntity, {
+      criado_por,
       titulo,
       recado,
-      criadoPor,
     });
 
     const recadoCriado = await this._manager.save(novoRecado);
@@ -57,9 +56,9 @@ export class RecadoRepository {
     return this.entityToModel(recadoCriado);
   }
 
-  public async listarRecados(idUsuario: string): Promise<Recado[]> {
+  public async listarRecados(email: string): Promise<Recado[]> {
     const clausula: FindOptionsWhere<RecadoEntity> = {
-      criadoPor: idUsuario,
+      criado_por: email,
       arquivado: false,
     };
 
@@ -70,9 +69,9 @@ export class RecadoRepository {
     return recadosFiltrados.map((r) => this.entityToModel(r));
   }
 
-  public async listarArquivados(idUsuario: string): Promise<Recado[]> {
+  public async listarArquivados(email: string): Promise<Recado[]> {
     const clausula: FindOptionsWhere<RecadoEntity> = {
-      criadoPor: idUsuario,
+      criado_por: email,
       arquivado: true,
     };
 
@@ -84,19 +83,19 @@ export class RecadoRepository {
   }
 
   async editarRecado(dados: AtualizarDTO): Promise<void> {
-    const { idRecado, titulo, recado, arquivado, criadoPor } = dados;
+    const { idRecado, titulo, recado, arquivado } = dados;
 
     await this._manager.update(
       RecadoEntity,
       { id: idRecado },
-      { titulo, recado, arquivado, criadoPor: criadoPor }
+      { titulo, recado, arquivado }
     );
   }
 
-  public async excluirRecado(id: string): Promise<RetornoExcluir> {
+  public async excluirRecado(idRecado: string): Promise<RetornoExcluir> {
     const recadoDelete = await this._manager.delete(RecadoEntity, {
       where: {
-        id: id,
+        idRecado: idRecado,
       },
     });
 
@@ -116,16 +115,30 @@ export class RecadoRepository {
     return {
       sucesso: true,
       mensagem: "Recado excluído com sucesso.",
-      dadosRetornados: id,
+      dadosRetornados: idRecado,
     };
+  }
+
+  async clear() {
+    await this._manager.delete(RecadoEntity, {});
   }
 
   // TRANSFORMA RESULTADO DA BUSCA EM UMA INSTANCIA DA MODEL
   private entityToModel(dadosDB: RecadoEntity): Recado {
-    const { id, titulo, recado, criadoPor } = dadosDB;
+    const usuario = new Usuario(
+      dadosDB.usuario.id,
+      dadosDB.usuario.nome,
+      dadosDB.usuario.email,
+      dadosDB.usuario.senha
+    );
 
-    const retorno = new Recado(id, titulo, recado, criadoPor);
+    const recado = new Recado(
+      dadosDB.id,
+      usuario.toJSON().email,
+      dadosDB.titulo,
+      dadosDB.recado
+    );
 
-    return retorno;
+    return recado;
   }
 }

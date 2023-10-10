@@ -39,12 +39,12 @@ export class RecadosController {
 
   static async deletar(req: Request, res: Response) {
     try {
-      const { idUsuario } = req.body;
+      const { email } = req.body;
       const { idRecado } = req.params;
 
       const usecase = new ExcluirRecado();
 
-      const resultado = await usecase.execute({ idRecado, idUsuario });
+      const resultado = await usecase.execute({ idRecado, email });
 
       if (!resultado.sucesso) return res.status(404).json(resultado);
 
@@ -57,13 +57,13 @@ export class RecadosController {
   static async editar(req: Request, res: Response) {
     try {
       const { idRecado } = req.params;
-      const { idUsuario, recado, titulo, arquivado, criadoEm } = req.body;
+      const { email, recado, titulo, arquivado, criado_em } = req.body;
 
       const usecase = new EditarRecado();
       const resultado = usecase.execute({
         idRecado,
-        idUsuario,
-        novosDados: { titulo, recado, arquivado, criadoEm },
+        email,
+        novosDados: { titulo, recado, arquivado, criado_em },
       });
 
       if (!resultado) {

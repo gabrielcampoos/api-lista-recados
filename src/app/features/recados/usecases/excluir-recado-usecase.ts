@@ -9,20 +9,20 @@ export type RetornoExcluir = {
 };
 
 export type ExcluirRecadoDTO = {
-  idUsuario: string;
+  email: string;
   idRecado: string;
 };
 
 export class ExcluirRecado {
   async execute(dados: ExcluirRecadoDTO): Promise<RetornoExcluir> {
-    const { idUsuario, idRecado } = dados;
+    const { email, idRecado } = dados;
 
     const repositoryUsuario = new UsuariosRepository();
     const repositoryRecado = new RecadoRepository();
     const cacheRepository = new CacheRepository();
 
-    const usuarioEncontrado = await repositoryUsuario.buscaUsuarioPorID(
-      idUsuario
+    const usuarioEncontrado = await repositoryUsuario.buscaUsuarioPorEmail(
+      email
     );
 
     if (!usuarioEncontrado) {
@@ -33,7 +33,7 @@ export class ExcluirRecado {
       };
     }
 
-    const recado = await repositoryRecado.recadoExiste(idUsuario, idRecado);
+    const recado = await repositoryRecado.recadoExiste(email, idRecado);
 
     if (!recado) {
       return {
@@ -43,7 +43,7 @@ export class ExcluirRecado {
     }
 
     await repositoryRecado.excluirRecado(idRecado);
-    await cacheRepository.delete(`recados-usuario-${idUsuario}`);
+    await cacheRepository.delete(`recados-usuario-${email}`);
     await cacheRepository.delete(`recado-${idRecado}`);
 
     return {

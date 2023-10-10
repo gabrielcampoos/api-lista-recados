@@ -9,11 +9,11 @@ type RetornoListar = {
 };
 
 export class ListarRecados {
-  async execute(idUsuario: string): Promise<RetornoListar> {
+  async execute(email: string): Promise<RetornoListar> {
     const repositoryRecado = new RecadoRepository();
     const cacheRepository = new CacheRepository();
 
-    const busca = await repositoryRecado.usuarioExiste(idUsuario);
+    const busca = await repositoryRecado.usuarioExiste(email);
 
     if (!busca) {
       return {
@@ -23,16 +23,16 @@ export class ListarRecados {
     }
 
     const recadosCache = await cacheRepository.get<RecadoJSON[]>(
-      `recados-usuario-${idUsuario}`
+      `recados-usuario-${email}`
     );
     let recados: RecadoJSON[] = [];
 
     if (!recadosCache) {
-      const recadosPrincipal = await repositoryRecado.listarRecados(idUsuario);
+      const recadosPrincipal = await repositoryRecado.listarRecados(email);
       recados = recadosPrincipal.map((r) => r.toJSON());
 
       await cacheRepository.set<RecadoJSON[]>(
-        `recados-usuario-${idUsuario}`,
+        `recados-usuario-${email}`,
         recados
       );
     } else {
@@ -45,10 +45,10 @@ export class ListarRecados {
     };
   }
 
-  async listarArquivados(idUsuario: string): Promise<RetornoListar> {
+  async listarArquivados(email: string): Promise<RetornoListar> {
     const repository = new RecadoRepository();
 
-    const busca = await repository.usuarioExiste(idUsuario);
+    const busca = await repository.usuarioExiste(email);
 
     if (!busca) {
       return {
@@ -57,7 +57,7 @@ export class ListarRecados {
       };
     }
 
-    const dadosRetornados = await repository.listarArquivados(idUsuario);
+    const dadosRetornados = await repository.listarArquivados(email);
 
     return {
       sucesso: true,

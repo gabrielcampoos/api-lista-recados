@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class CreateTableRecados1696215228441 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -50,13 +45,12 @@ export class CreateTableRecados1696215228441 implements MigrationInterface {
           },
         ],
         foreignKeys: [
-          new TableForeignKey({
+          {
             columnNames: ["criado_por"],
-            referencedColumnNames: ["email"],
             referencedTableName: "usuarios",
-            name: "fk_recados_criado_por",
+            referencedColumnNames: ["email"],
             onDelete: "CASCADE",
-          }),
+          },
         ],
       })
     );

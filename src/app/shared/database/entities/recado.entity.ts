@@ -21,10 +21,10 @@ export class RecadoEntity {
   recado!: string;
 
   @Column()
-  criadoPor!: string;
+  criado_por!: string;
 
   @Column()
-  criadoEm!: Date;
+  criado_em!: Date;
 
   @Column()
   arquivado!: boolean;
@@ -32,6 +32,7 @@ export class RecadoEntity {
   @ManyToOne(() => UsuarioEntity, (usuario) => usuario.recados)
   @JoinColumn({
     name: "criado_por",
+    foreignKeyConstraintName: "fk_recados_criado_por",
     referencedColumnName: "email",
   })
   usuario!: UsuarioEntity;
@@ -40,6 +41,6 @@ export class RecadoEntity {
   beforeInsert() {
     // o que deve ser feito antes de inserir um novo registro de transação
     this.id = randomUUID();
-    this.criadoEm = new Date();
+    this.criado_em = new Date();
   }
 }

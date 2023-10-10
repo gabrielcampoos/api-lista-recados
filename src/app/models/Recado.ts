@@ -3,28 +3,28 @@ import { Base } from ".";
 type AtualizarRecadoDTO = {
   titulo?: string;
   recado?: string;
-  criadoEm: Date;
+  criado_em: Date;
 };
 
 export type RecadoJSON = {
   id: string;
   titulo?: string;
   recado?: string;
-  criadoEm: Date;
-  criadoPor: string;
+  criado_em: Date;
+  criado_por: string;
 };
 
 export class Recado extends Base {
-  private _criadoEm: Date;
+  private _criado_em: Date;
 
   constructor(
     id: string,
-    private _criadoPor: string,
+    private _criado_por: string,
     private _titulo?: string,
     private _recado?: string
   ) {
     super(id);
-    this._criadoEm = new Date();
+    this._criado_em = new Date();
   }
 
   public toJSON(): RecadoJSON {
@@ -32,8 +32,8 @@ export class Recado extends Base {
       id: this._id,
       titulo: this._titulo,
       recado: this._recado,
-      criadoEm: this._criadoEm,
-      criadoPor: this._criadoPor,
+      criado_em: this._criado_em,
+      criado_por: this._criado_por,
     };
   }
 
@@ -53,8 +53,8 @@ export class Recado extends Base {
       this._recado = novasInfos.recado;
     }
 
-    if (novasInfos.criadoEm) {
-      this._criadoEm = novasInfos.criadoEm;
+    if (novasInfos.criado_em) {
+      this._criado_em = novasInfos.criado_em;
     }
 
     return true;
