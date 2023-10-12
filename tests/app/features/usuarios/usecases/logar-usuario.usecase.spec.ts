@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { UsuariosRepository } from "../../../../../src/app/features/usuarios/repositories";
 import { LogarUsuario } from "../../../../../src/app/features/usuarios/usecases";
 import { Usuario } from "../../../../../src/app/models";
@@ -47,12 +46,7 @@ describe("Testes para o usecase de logar usuário", () => {
   });
 
   test("Deve retornar um objeto de sucesso quando chamar o método execute passando um e-mail e senha que existem na base de dados", async () => {
-    const usuarioFake = new Usuario(
-      randomUUID(),
-      "any_nome",
-      "any_email",
-      "any_senha"
-    );
+    const usuarioFake = new Usuario("any_nome", "any_email", "any_senha");
 
     jest
       .spyOn(UsuariosRepository.prototype, "autenticacaoLogin")

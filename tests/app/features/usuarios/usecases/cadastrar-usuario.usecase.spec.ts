@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { UsuariosRepository } from "../../../../../src/app/features/usuarios/repositories";
 import { CadastrarUsuario } from "../../../../../src/app/features/usuarios/usecases";
 import { Usuario } from "../../../../../src/app/models";
@@ -48,12 +47,7 @@ describe("Testes para o usecase de cadastrar usuário", () => {
   });
 
   test("Deve cadastrar um usário quando chamar o método execute passando um e-mail que não existe na base de dados.", async () => {
-    const usuarioFake = new Usuario(
-      randomUUID(),
-      "any_nome",
-      "any_email",
-      "any_senha"
-    );
+    const usuarioFake = new Usuario("any_nome", "any_email", "any_senha");
     jest
       .spyOn(UsuariosRepository.prototype, "verificarSeExisteUsuarioPorEmail")
       .mockResolvedValue(false);

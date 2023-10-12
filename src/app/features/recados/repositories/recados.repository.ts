@@ -126,14 +126,12 @@ export class RecadoRepository {
   // TRANSFORMA RESULTADO DA BUSCA EM UMA INSTANCIA DA MODEL
   private entityToModel(dadosDB: RecadoEntity): Recado {
     const usuario = new Usuario(
-      dadosDB.usuario.id,
       dadosDB.usuario.nome,
       dadosDB.usuario.email,
       dadosDB.usuario.senha
     );
 
     const recado = new Recado(
-      dadosDB.id,
       usuario.toJSON().email,
       dadosDB.titulo,
       dadosDB.recado

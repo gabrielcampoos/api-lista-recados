@@ -61,6 +61,6 @@ export class UsuariosRepository {
 
   // TRANSFORMA RESULTADO DA BUSCA EM UMA INSTANCIA DA MODEL
   private entityToModel(dadosDB: UsuarioEntity): Usuario {
-    return new Usuario(dadosDB.id, dadosDB.nome, dadosDB.email, dadosDB.senha);
+    return new Usuario(dadosDB.nome, dadosDB.email, dadosDB.senha);
   }
 }

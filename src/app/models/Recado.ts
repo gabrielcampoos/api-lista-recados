@@ -1,5 +1,3 @@
-import { Base } from ".";
-
 type AtualizarRecadoDTO = {
   titulo?: string;
   recado?: string;
@@ -7,29 +5,25 @@ type AtualizarRecadoDTO = {
 };
 
 export type RecadoJSON = {
-  id: string;
   titulo?: string;
   recado?: string;
   criado_em: Date;
   criado_por: string;
 };
 
-export class Recado extends Base {
+export class Recado {
   private _criado_em: Date;
 
   constructor(
-    id: string,
     private _criado_por: string,
     private _titulo?: string,
     private _recado?: string
   ) {
-    super(id);
     this._criado_em = new Date();
   }
 
   public toJSON(): RecadoJSON {
     return {
-      id: this._id,
       titulo: this._titulo,
       recado: this._recado,
       criado_em: this._criado_em,

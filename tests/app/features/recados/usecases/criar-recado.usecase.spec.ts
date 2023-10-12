@@ -8,9 +8,7 @@ import {
 import { criarUsuarios } from "../../../../helpers/criar-usuarios.builder";
 
 describe("Testes para o usecase de criar recados", () => {
-  jest.mock(
-    "../../../../src/app/features/recados/repositories/recados.repository"
-  );
+  jest.mock("../../../../../src/app/features/recados/repositories");
 
   function createSut() {
     return new CriarRecado();

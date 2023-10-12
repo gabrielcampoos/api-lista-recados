@@ -30,7 +30,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only ./src/main/index.ts",
     "dev:redis": "ts-node-dev --respawn --transpile-only ./src/index.ts",
-    "dev:db": "ts-node-dev --respawn --transpile-only ./src/main/config/database.config.ts",
+    "dev:db": "ts-node-dev --respawn --transpile-only ./src/main/config/typeorm.config.ts",
     "migration:create": "yarn typeorm migration:create ./src/app/shared/database/migrations/<Nome-Migration>",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:run": "yarn typeorm migration:run -d ./src/main/config/typeorm.config.ts",
